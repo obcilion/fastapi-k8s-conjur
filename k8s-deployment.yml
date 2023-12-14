@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-conjur-fastapi-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: k8s-conjur-fastapi
+  template:
+    metadata:
+      labels:
+        app: k8s-conjur-fastapi
+    spec:
+      containers:
+      - name: k8s-conjur-fastapi
+        image: localhost:5000/k8s-conjur-fastapi:latest
+        ports:
+        - containerPort: 8000
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8000
+          initialDelaySeconds: 3
+          periodSeconds: 3
